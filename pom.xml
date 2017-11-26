@@ -25,7 +25,7 @@
   </dependencies>
 
   <build>
-    <finalName>plop</finalName>
+    <finalName>myApp</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -43,6 +43,7 @@
         <configuration>
           <images>
             <image>
+              <alias>${docker.imageName}</alias>
               <name>${docker.imageName}</name>
               <build>
                 <dockerFileDir>${project.basedir}/</dockerFileDir>
