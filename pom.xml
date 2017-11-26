@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <properties>
+    <java.version>1.8</java.version>
+    <javax.servlet.version>3.0.1</javax.servlet.version>
+    <docker.imageName>myappimgname</docker.imageName>
+  </properties>
+
+  <groupId>fr.jmottez</groupId>
+  <artifactId>tomcat-docker-maven</artifactId>
+  <version>1.0</version>
+
+  <packaging>war</packaging>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>${javax.servlet.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>plop</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>io.fabric8</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>0.23.0</version>
+        <configuration>
+          <images>
+            <image>
+              <name>${docker.imageName}</name>
+              <build>
+                <dockerFileDir>${project.basedir}/</dockerFileDir>
+                <assembly>
+                  <inline>
+                    <files>
+                      <file>
+                        <source>target/${project.build.finalName}.war</source>
+                        <destName>${project.build.finalName}.war</destName>
+                        <outputDirectory>.</outputDirectory>
+                      </file>
+                    </files>
+                  </inline>
+                </assembly>
+              </build>
+              <run>
+                <ports>
+                  <port>8080:8080</port>
+                </ports>
+              </run>
+            </image>
+          </images>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
+
